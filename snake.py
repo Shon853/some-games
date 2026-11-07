@@ -1,8 +1,7 @@
-
 import random
 import tkinter as tk
 
-# הגדרות כלליות 
+# הגדרות כלליות
 
 CELL_SIZE = 20
 GRID_WIDTH = 25
@@ -14,7 +13,7 @@ PONG_HEIGHT = 400
 PONG_SPEED = 16
 
 
-#  משחק סנייק 
+# משחק סנייק
 
 class SnakeFrame(tk.Frame):
 
@@ -150,7 +149,7 @@ class SnakeFrame(tk.Frame):
         dx, dy = moves[self.direction]
         new_head = (head_x + dx, head_y + dy)
 
-        # Проверка границ
+        # בדיקת גבולות
         if (
             new_head[0] < 0 or
             new_head[0] >= GRID_WIDTH or
@@ -162,7 +161,7 @@ class SnakeFrame(tk.Frame):
 
         eating = new_head == self.food
 
-        # Хвост освобождает клетку, если еда не съедается
+        # הזנב מתפנה אם הנחש לא אוכל
         body = self.snake if eating else self.snake[:-1]
 
         if new_head in body:
@@ -225,7 +224,7 @@ class SnakeFrame(tk.Frame):
         )
 
 
-#  משחק פונג 
+# משחק פונג
 
 class PongFrame(tk.Frame):
 
@@ -404,10 +403,16 @@ class PongFrame(tk.Frame):
             if abs(self.ball_dx) < 1.0:
                 self.ball_dx = random.choice([-1.0, 1.0])
 
-            # הגברת מהירות
+            # הגברת מהירות עם הגבלה למהירות הכוללת
             max_speed = 8.0
-            self.ball_dx = max(-max_speed, min(max_speed, self.ball_dx * 1.03))
-            self.ball_dy = max(-max_speed, min(max_speed, self.ball_dy * 1.03))
+            self.ball_dx *= 1.03
+            self.ball_dy *= 1.03
+
+            speed = (self.ball_dx**2 + self.ball_dy**2) ** 0.5
+            if speed > max_speed:
+                scale = max_speed / speed
+                self.ball_dx *= scale
+                self.ball_dy *= scale
 
             self.score += 1
 
@@ -453,7 +458,7 @@ class PongFrame(tk.Frame):
         )
 
 
-#  מסך התפריט הראשי 
+# מסך התפריט הראשי
 
 class MainMenu(tk.Frame):
 
@@ -514,7 +519,7 @@ class MainMenu(tk.Frame):
         ).pack(pady=40)
 
 
-#  מנהל האפליקציה הראשי 
+# מנהל האפליקציה הראשי
 
 class App(tk.Tk):
 
@@ -580,7 +585,7 @@ class App(tk.Tk):
         self.destroy()
 
 
-# הפעלת האפליקציה 
+# הפעלת האפליקציה
 
 if __name__ == "__main__":
     app = App()
